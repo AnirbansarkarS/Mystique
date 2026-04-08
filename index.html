@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mystique AI Chat</title>
+    <style>
+        :root {
+            --primary-glow: #7b2cbf;
+            --secondary-glow: #10002b;
+            --mystique-skin: #2dcebf;
+            --mystique-eyes: #f39c12;
+            --glass-bg: rgba(20, 20, 30, 0.6);
+            --glass-border: rgba(123, 44, 191, 0.3);
+            --text-main: #e0e0e0;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(-45deg, #10002b, #3c096c, #5a189a, #001233);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: var(--text-main);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .chat-container {
+            width: 100%;
+            max-width: 500px;
+            height: 80vh;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(123, 44, 191, 0.4), inset 0 0 20px rgba(45, 206, 191, 0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .chat-container::before {
+            content: "";
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(243,156,18,0.05) 0%, transparent 60%);
+            animation: pulseGlow 8s infinite alternate;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        @keyframes pulseGlow {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            100% { transform: scale(1.2); opacity: 1; }
+        }
+
+        .header {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid var(--glass-border);
+            z-index: 1;
+            background: rgba(0,0,0,0.2);
+        }
+
+        .header h2 {
+            margin: 0;
+            font-weight: 300;
+            letter-spacing: 2px;
+            color: #fff;
+            text-shadow: 0 0 10px var(--mystique-skin), 0 0 20px var(--primary-glow);
+        }
+        
+        .setup-area {
+            padding: 15px;
+            background: rgba(0,0,0,0.4);
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 1;
+        }
+        
+        .setup-area input[type=text], .setup-area input[type=password], .setup-area input[type=file] {
+            padding: 8px 12px;
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            outline: none;
+        }
+
+        .setup-area button {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #7b2cbf, #5a189a);
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            text-shadow: 0 0 5px rgba(255,255,255,0.5);
+            transition: all 0.3s;
+        }
+        
+        .setup-area button:hover {
+            box-shadow: 0 0 15px var(--mystique-eyes);
+        }
+
+        .chat-box {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            z-index: 1;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 15px;
+            line-height: 1.4;
+            animation: fadeIn 0.4s ease-out forwards;
+            position: relative;
+            word-wrap: break-word;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .user-msg {
+            align-self: flex-end;
+            background: rgba(45, 206, 191, 0.15);
+            border: 1px solid rgba(45, 206, 191, 0.4);
+            box-shadow: 0 0 10px rgba(45, 206, 191, 0.2);
+            color: #fff;
+            border-bottom-right-radius: 2px;
+        }
+
+        .bot-msg {
+            align-self: flex-start;
+            background: rgba(123, 44, 191, 0.25);
+            border: 1px solid rgba(123, 44, 191, 0.5);
+            box-shadow: 0 0 10px rgba(123, 44, 191, 0.3);
+            color: #fff;
+            border-bottom-left-radius: 2px;
+        }
+
+        .feedback-btns {
+            margin-top: 8px;
+            display: flex;
+            gap: 10px;
+            font-size: 0.85em;
+        }
+
+        .f-btn {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 4px 8px;
+            border-radius: 10px;
+            color: #aaa;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .f-btn:hover {
+            color: #fff;
+            border-color: var(--mystique-eyes);
+            box-shadow: 0 0 8px var(--mystique-eyes);
+        }
+
+        .input-area {
+            display: flex;
+            padding: 15px;
+            border-top: 1px solid var(--glass-border);
+            background: rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        #chat-input {
+            flex-grow: 1;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            outline: none;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+            transition: all 0.3s;
+        }
+
+        #chat-input:focus {
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 15px rgba(45, 206, 191, 0.4), inset 0 0 5px rgba(0,0,0,0.5);
+        }
+
+        #send-btn {
+            margin-left: 10px;
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #7b2cbf, #5a189a);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 15px rgba(123, 44, 191, 0.6);
+            transition: all 0.3s;
+        }
+
+        #send-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 25px var(--mystique-eyes);
+            background: linear-gradient(135deg, #9d4edd, #7b2cbf);
+        }
+
+        .sys-info {
+            font-size: 0.75em;
+            color: rgba(255,255,255,0.4);
+            text-align: center;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="chat-container">
+        <div class="header">
+            <h2>Mystique Persona</h2>
+        </div>
+        <div class="setup-area" id="setup-area">
+            <input type="password" id="api-key" placeholder="Enter Gemini API Key..." />
+            <input type="text" id="target-name" placeholder="Name of Person in Chat (e.g. Mom)..." />
+            <input type="file" id="chat-file" accept=".txt" />
+            <button id="train-btn" onclick="trainPersona()">Engrain Personality</button>
+            <div id="train-status" style="font-size: 0.8em; color: var(--mystique-skin); text-align: center;"></div>
+        </div>
+        <div class="chat-box" id="chat-box">
+            <div class="message bot-msg">
+                Upload a WhatsApp chat, give me a name, and provide a Gemini API Key to become them.
+            </div>
+        </div>
+        <div class="input-area">
+            <input type="text" id="chat-input" placeholder="Type your message..." autocomplete="off">
+            <button id="send-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const chatBox = document.getElementById('chat-box');
+        const chatInput = document.getElementById('chat-input');
+        const sendBtn = document.getElementById('send-btn');
+
+        async function trainPersona() {
+            const fileInput = document.getElementById('chat-file');
+            const targetName = document.getElementById('target-name').value.trim();
+            const apiKey = document.getElementById('api-key').value.trim();
+            const statusDiv = document.getElementById('train-status');
+
+            if (!fileInput.files.length || !targetName || !apiKey) {
+                statusDiv.textContent = "Please fill all fields.";
+                return;
+            }
+
+            statusDiv.textContent = "Analyzing chat file and extracting persona using Gemini... Please wait.";
+
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+            formData.append('target_name', targetName);
+            formData.append('api_key', apiKey);
+
+            try {
+                const response = await fetch('/api/upload_chat', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (response.ok) {
+                    statusDiv.textContent = "Persona absorbed successfully. You can chat now.";
+                    appendMessage("I have fully absorbed their personality...", 'bot-msg');
+                    document.getElementById('setup-area').style.display = 'none';
+                } else {
+                    statusDiv.textContent = "Failed to absorb persona.";
+                }
+            } catch (err) {
+                statusDiv.textContent = "Error uploading.";
+            }
+        }
+
+        async function sendMessage() {
+            const text = chatInput.value.trim();
+            const apiKey = document.getElementById('api-key').value.trim();
+            if (!text) return;
+
+            appendMessage(text, 'user-msg');
+            chatInput.value = '';
+
+            // Optional loading indicator
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'message bot-msg';
+            loadingDiv.textContent = '...';
+            loadingDiv.id = 'loading';
+            chatBox.appendChild(loadingDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            try {
+                // Call the mock backend
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_message: text, api_key: apiKey })
+                });
+                
+                document.getElementById('loading').remove();
+
+                if (response.ok) {
+                    const data = await response.json();
+                    appendBotMessage(data.llm_response);
+                } else {
+                    appendMessage("Error communicating with AI.", 'bot-msg');
+                }
+            } catch (error) {
+                if(document.getElementById('loading')) document.getElementById('loading').remove();
+                appendMessage("Network error.", 'bot-msg');
+            }
+        }
+
+        function appendMessage(text, className) {
+            const div = document.createElement('div');
+            div.className = `message ${className}`;
+            div.textContent = text;
+            chatBox.appendChild(div);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function appendBotMessage(text) {
+            const div = document.createElement('div');
+            div.className = 'message bot-msg';
+            div.innerText = text;
+
+            const feedbackDiv = document.createElement('div');
+            feedbackDiv.className = 'feedback-btns';
+            
+            const upBtn = document.createElement('span');
+            upBtn.className = 'f-btn';
+            upBtn.innerHTML = '👍 sounds like her';
+            upBtn.onclick = () => sendFeedback(text, "sounds like her", upBtn.parentElement);
+            
+            const downBtn = document.createElement('span');
+            downBtn.className = 'f-btn';
+            downBtn.innerHTML = '👎 not quite';
+            downBtn.onclick = () => sendFeedback(text, "not quite", downBtn.parentElement);
+
+            feedbackDiv.appendChild(upBtn);
+            feedbackDiv.appendChild(downBtn);
+            
+            div.appendChild(feedbackDiv);
+            chatBox.appendChild(div);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        async function sendFeedback(message, feedbackType, container) {
+            container.innerHTML = `<span style="color:var(--mystique-skin)">Feedback saved!</span>`;
+            await fetch('/api/feedback', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: message, feedback: feedbackType })
+            });
+        }
+
+        sendBtn.addEventListener('click', sendMessage);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+    </script>
+</body>
+</html>
