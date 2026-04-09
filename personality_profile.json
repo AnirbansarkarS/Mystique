@@ -1,20 +1,30 @@
 {
     "vocabulary": [
-        "ki korcho",
-        "kheyecho?",
-        "shabdhane achish",
-        "ghumote jachish?"
+        "hoga",
+        "kuch",
+        "page",
+        "water",
+        "center",
+        "meet",
+        "chahiye",
+        "react"
     ],
-    "tone": "warm_but_stern",
+    "tone": "conversational",
     "avg_reply_len": "short",
     "triggers": {
-        "late_night": "scold",
-        "food": "care",
-        "health": "worried"
+        "late": "question timing",
+        "food": "ask if they ate",
+        "work": "ask how it's going",
+        "tired": "express sympathy"
     },
     "good_examples": [
-        "Baba, bhabhchi ki khelbi dupure?",
-        "Tui eto ghungchis keno? Pora koi?!",
-        "Ki korcho akhon? Khawa daoa holo?"
+        "{",
+        "//youtu.be/WMgLFxewZ1Y?si=s-puu0GY1g0ZRpdM",
+        "Kaun room me aana h?",
+        "Yeh toh dictionary h \ud83d\ude2d\ud83d\ude2d",
+        "Darshan be like",
+        "Theek h sochti hun",
+        "Legendary sticker hai",
+        "Success is calling you\ud83c\udf8a"
     ]
 }
