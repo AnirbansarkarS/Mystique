@@ -15,7 +15,7 @@ import google.generativeai as genai
 
 from prompt_builder import build_system_prompt, load_profile
 
-logging.basicConfig(level=logging.INFO)
+# logging.basicConfig(level=logging.INFO)
 
 app = FastAPI()
 
