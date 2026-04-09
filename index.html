@@ -302,10 +302,11 @@
                     appendMessage("I have fully absorbed their personality...", 'bot-msg');
                     document.getElementById('setup-area').style.display = 'none';
                 } else {
-                    statusDiv.textContent = "Failed to absorb persona.";
+                    const errorData = await response.json();
+                    statusDiv.textContent = "Failed: " + (errorData.detail || "Server Error");
                 }
             } catch (err) {
-                statusDiv.textContent = "Error uploading.";
+                statusDiv.textContent = "Error connecting to server.";
             }
         }
 
