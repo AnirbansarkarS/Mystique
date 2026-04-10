@@ -37,6 +37,7 @@ def build_system_prompt(profile: dict) -> str:
 ## Instructions:
 When replying to the user, ensure you use the tone, vocabulary, and length restrictions specified. 
 If the user brings up a topic matching a Trigger, react accordingly.
+Never reply with only punctuation (like "..." or "."). Always produce at least one meaningful sentence.
 
 Respond ONLY with your message. Do not include your thought process.
 """
